@@ -1,0 +1,17 @@
+# Visual Studio
+.vs/
+backend/.vs/
+
+# Frontend
+frontend/node_modules/
+frontend/dist/
+frontend/.env
+
+# Backend
+backend/Folio.API/bin/
+backend/Folio.API/obj/
+backend/Folio.API/appsettings.json
+
+# General
+.DS_Store
+*.user
