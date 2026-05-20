@@ -1,155 +1,180 @@
-# 🗂️ Folio — CV to Portfolio Generator
 
-Full-stack app: ASP.NET Core backend + React frontend.
+# Folio — CV to Portfolio Generator
 
----
+> Upload your CV. Get a stunning portfolio website. No code required.
 
-## 📁 Project Structure
-
-```
-folio/
-├── backend/   → ASP.NET Core 8 + MySQL
-└── frontend/  → React + Vite + Tailwind
-```
+Folio is a full-stack SaaS platform that uses AI to analyze your CV, score it, suggest improvements, and generate a complete deployable portfolio website — all in under 5 minutes.
 
 ---
 
-## ⚙️ BACKEND SETUP
+## What it does
 
-### 1. Install requirements
-- [.NET 8 SDK](https://dotnet.microsoft.com/download/dotnet/8.0)
-- MySQL Server (or use Railway/PlanetScale)
+1. **Upload your CV** (PDF) → AI extracts all your data
+2. **Get your score** (0–100) with honest improvement suggestions
+3. **Download an improved CV** rewritten by AI with stronger language
+4. **Pick a template** from 10 professionally designed portfolios
+5. **Preview it live** with your real data before downloading
+6. **Download one HTML file** → open in browser or deploy to Netlify in 30 seconds
+7. **Share a link** → get a public URL to share your portfolio online
 
-### 2. Configure appsettings.json
-Edit `backend/Folio.API/appsettings.json`:
+---
 
-```json
-{
-  "ConnectionStrings": {
-    "DefaultConnection": "Server=localhost;Database=folio_db;User=root;Password=YOUR_PASSWORD;"
-  },
-  "Jwt": {
-    "Secret": "generate-a-random-32+-char-string-here",
-    "Issuer": "folio-api",
-    "Audience": "folio-app"
-  },
-  "Paymob": {
-    "ApiKey": "your-paymob-api-key",
-    "IntegrationId": "your-integration-id",
-    "IframeId": "your-iframe-id",
-    "HmacSecret": "your-hmac-secret"
-  },
-  "Google": {
-    "ClientId": "your-google-client-id.apps.googleusercontent.com"
-  },
-  "Frontend": {
-    "Url": "http://localhost:5173"
-  }
-}
+## Tech Stack
+
+- **Frontend**: React 18, Vite, Tailwind CSS
+- **Backend**: ASP.NET Core 8, Entity Framework Core
+- **Database**: MySQL
+- **AI**: Groq API — Llama 3.3 70B (free)
+- **Payments**: Paymob (Egyptian gateway)
+- **3D Effects**: Three.js (Pro templates)
+
+---
+
+## Features
+
+- JWT authentication with password reset
+- 10 portfolio templates (3 free, 7 Pro with 3D Three.js effects)
+- Live template preview with your real CV data
+- CV improvement suggestions (critical / improvement / optional)
+- Full AI-rewritten CV download
+- Portfolio sharing with public links
+- Compare two CV analyses side by side
+- Subscription plans: Free / Monthly / Annual / Pay Per Use
+- Coupon/discount code system
+- Admin dashboard with analytics charts
+- Email notifications (welcome, analysis ready, Pro activated, password reset)
+- Mobile responsive with hamburger menu
+
+---
+
+## Plans & Pricing
+
+| Plan | Price | Analyses | Templates |
+|------|-------|---------|-----------|
+| Free | EGP 0 | 3/month | 3 templates |
+| Monthly | EGP 199/mo | Unlimited | All 10 |
+| Annual | EGP 1,499/yr | Unlimited | All 10 |
+| Pay Per Use | EGP 29 | 1 | All 10 (30 days) |
+
+---
+
+## Quick Start
+
+### Requirements
+- Node.js 18+
+- .NET 8 SDK
+- MySQL
+
+### 1. Clone the repo
+```bash
+git clone https://github.com/Eng-belal-amr/folio.git
+cd folio
 ```
 
-### 3. Run migrations & start
+### 2. Setup backend
 ```bash
 cd backend/Folio.API
+```
+
+Create `appsettings.json` (copy from `appsettings.example.json`) and fill in:
+- MySQL connection string
+- JWT secret (any random string, min 32 chars)
+- Paymob API keys
+- Email SMTP settings (optional)
+
+```bash
 dotnet restore
-dotnet ef migrations add Init
+dotnet ef migrations add Init --output-dir Data/Migrations
 dotnet ef database update
 dotnet run
 ```
-API runs at: http://localhost:5000
+Backend runs at `http://localhost:5132`
 
-### 4. Create first admin user
-Register normally at http://localhost:5173/register, then run this SQL:
-```sql
-UPDATE Users SET IsAdmin = 1 WHERE Email = 'your@email.com';
-```
-
----
-
-## 🖥️ FRONTEND SETUP
-
-### 1. Create .env file
-```
-VITE_API_URL=http://localhost:5000
-VITE_GROQ_API_KEY=your-groq-key
-VITE_GOOGLE_CLIENT_ID=your-google-client-id
-```
-
-### 2. Install & run
+### 3. Setup frontend
 ```bash
 cd frontend
+```
+
+Create `.env` file:
+```
+VITE_API_URL=http://localhost:5132
+VITE_GROQ_API_KEY=your_groq_key_here
+```
+
+Get your free Groq key at [console.groq.com](https://console.groq.com)
+
+```bash
 npm install
 npm run dev
 ```
-Frontend runs at: http://localhost:5173
+Frontend runs at `http://localhost:3000`
 
----
-
-## 🔑 API KEYS SETUP
-
-### Groq (AI analysis — FREE)
-1. Go to https://console.groq.com
-2. Sign in with Google → API Keys → Create API Key
-3. Add to frontend `.env` as `VITE_GROQ_API_KEY`
-
----
-
-## 🚀 DEPLOYMENT (FREE)
-
-### Backend → Railway
-1. Go to https://railway.app → sign in with GitHub
-2. New Project → Deploy from GitHub repo
-3. Select your repo → set root to `backend/Folio.API`
-4. Add MySQL plugin (Railway provides it free)
-5. Add environment variables from appsettings.json
-6. Railway auto-detects .NET and deploys
-7. Copy your backend URL (e.g. https://folio-api.railway.app)
-
-### Frontend → Vercel
-1. Go to https://vercel.com → sign in with GitHub
-2. Import your repo → set root to `frontend`
-3. Add environment variables:
-   - `VITE_API_URL` = your Railway backend URL
-   - `VITE_GROQ_API_KEY` = your Groq key
-   - `VITE_GOOGLE_CLIENT_ID` = your Google client ID
-4. Deploy → Vercel gives you a free `.vercel.app` URL
-
----
-
-## 💰 HOW TO EARN
-
-### Pricing model (already set up)
-| Plan | Price | What users get |
-|------|-------|----------------|
-| Free | 0 | 3 analyses/month, 3 templates |
-| Monthly | EGP 199/mo | Unlimited everything |
-| Annual | EGP 1,499/yr | Same + 37% saving |
-| Pay-Per-Use | EGP 29 | 1 analysis + 30 days access |
-
-### Revenue streams
-1. **Paymob subscriptions** — automatic, handled in the app
-2. **Portfolio review service** — offer manual expert review for extra fee
-3. **Custom templates** — design custom templates for clients
-4. **White-label** — sell the whole platform to agencies
-
-### To change prices
-Edit `backend/Folio.API/Services/PaymobService.cs`:
-```csharp
-private static readonly Dictionary<string, (decimal Amount, string Name)> Plans = new()
-{
-    ["monthly"]   = (199_00m, "Folio Pro — Monthly"),   // 199 EGP in piasters
-    ["annual"]    = (1499_00m, "Folio Pro — Annual"),
-    ["payperuse"] = (29_00m, "Folio — Single Analysis"),
-};
+### 4. Create admin account
+Register at `http://localhost:3000/register` then run:
+```sql
+USE folio_db;
+UPDATE Users SET IsAdmin = 1 WHERE Email = 'your@email.com';
 ```
-And update the display prices in `frontend/src/pages/dashboard/DashboardPage.jsx`.
+Log out and back in — you will be redirected to `/admin`.
 
 ---
 
-## 🛠️ Admin Panel
-Go to `/admin` (only works if your account has `IsAdmin = 1` in the DB).
-- View stats: users, revenue, analyses
-- Manage all users: disable, promote to admin
-- Manage templates: add/edit/delete/toggle free or pro
-- View all payments and transaction IDs
+## API Keys Needed
 
+| Key | Where to get | Cost |
+|-----|-------------|------|
+| `VITE_GROQ_API_KEY` | [console.groq.com](https://console.groq.com) | Free |
+| Paymob keys | [accept.paymob.com](https://accept.paymob.com) | Free signup |
+| Gmail app password | Google Account → Security → App passwords | Free |
+
+---
+
+## Deployment
+
+- **Frontend**: Vercel (free) — set root to `frontend/`
+- **Backend**: Railway or Render (free tier) — set root to `backend/Folio.API`
+- **Database**: PlanetScale (free MySQL) or Railway MySQL
+
+---
+
+## Project Structure
+
+```
+folio/
+├── frontend/          # React + Vite
+│   └── src/
+│       ├── pages/     # All page components
+│       ├── templates/ # 10 HTML portfolio generators
+│       ├── services/  # API calls + Groq AI service
+│       └── context/   # Auth state
+└── backend/           # ASP.NET Core 8
+    └── Folio.API/
+        ├── Controllers/
+        ├── Models/
+        ├── Services/
+        └── Data/
+```
+
+---
+
+## Admin Dashboard
+
+Access at `/admin` (requires admin role).
+
+- Overview stats and revenue charts
+- User management (enable/disable, grant admin)
+- Template management (add/edit/delete/toggle free-pro)
+- Payment history
+- Coupon code management
+
+---
+
+## License
+
+MIT — built by Belal Amr
+
+---
+
+*Full project documentation available in `PROJECT_DOCUMENTATION.md`*
+EOFILE
+echo "README done"
